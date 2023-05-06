@@ -1,0 +1,26 @@
+#! /bin/bash
+apt install git -y
+git clone https://github.com/NinjaRandy/maven-web-application.git
+ls
+cd maven-web-application
+apt install maven -y
+
+ls
+mvn clean install
+wget https://archive.apache.org/dist/tomcat/tomcat-9/v9.0.30/bin/apache-tomcat-9.0.30.tar.gz
+tar -xvf apache-tomcat-9.0.30.tar.gz
+# Set the new port number
+NEW_PORT=8081
+
+# Set the path to the Tomcat configuration file
+CONF_FILE=/home/ubuntu/linux/maven-web-application/apache-tomcat-9.0.30/conf/server.xml
+
+# Replace the default port number (8080) with the new port number in the configuration file
+sed -i "s/<Connector port=\"8080\"/<Connector port=\"$NEW_PORT\"/" $CONF_FILE
+
+ls
+cd /home/ubuntu/linux/maven-web-application/apache-tomcat-9.0.30/bin
+sh shutdown.sh
+
+sh startup.sh
+cp -r /home/ubuntu/linux/maven-web-application/target/* /home/ubuntu/linux/maven-web-application/apache-tomcat-9.0.30
